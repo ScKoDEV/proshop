@@ -1,5 +1,5 @@
 import { PRODUCTS_URL } from "../constants";
-import { apiSlice } from "./apiSlice";
+import { apiSlice } from "./apiSlice"; // We need to import this because we are dealing with async requests
 
 export const productsApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
