@@ -4,17 +4,28 @@ import {Table, Button} from 'react-bootstrap'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import {FaTimes, FaTrash, FaEdit, FaCheck} from 'react-icons/fa'
-import {useGetUsersQuery} from '../slices/usersApiSlice'
+import {useGetUsersQuery, useDeleteUserMutation} from '../slices/usersApiSlice'
+import {toast} from 'react-toastify'
 
 const UserListScreen = () => {
     const {data:users, refetch, isLoading, error} = useGetUsersQuery()
+    const [deleteUser, {isLoading:loadingDelete}] = useDeleteUserMutation()
 
-    const deleteHandler = (id) => {
-        console.load('delete')
+    const deleteHandler = async (id) => {
+        if(window.confirm('Are you sure?')){
+            try {
+                await deleteUser(id)
+                toast.success('User deleted')
+                refetch()
+            } catch (err) {
+                toast.error(err?.data?.message || err.error)
+            }
+        }
     }
   return (
     <>
       <h1>Users</h1>
+      {loadingDelete && <Loader />}
       {isLoading ? (<Loader />) : error ? (<Message variant='danger'>{error}</Message>) : (
         <Table striped hover responsive className='table-sm'>
             <thead>
@@ -43,7 +54,7 @@ const UserListScreen = () => {
                                     <FaEdit />
                                 </Button>
                             </LinkContainer>
-                            <Button variant='danger' className='btn-sm'>
+                            <Button variant='danger' className='btn-sm' onClick={() => deleteHandler(user._id)}>
                                 <FaTrash style={{color: 'white'}} />
                                 </Button>
                         </td>
