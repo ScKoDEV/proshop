@@ -6,6 +6,7 @@ import Loader from '../components/Loader'
 import Message from '../components/Message'
 import { Link, useParams } from 'react-router-dom'
 import Paginate from '../components/Paginate'
+import ProductCarousel from '../components/ProductCarousel'
 
 
 const HomeScreen = () => {
@@ -15,7 +16,7 @@ const {data, isLoading, isError} = useGetProductsQuery({keyword, pageNumber})
 
   return (
     <>
-    {keyword && <Link to='/' className='btn btn-light mb-4'>Go Back</Link>}
+    {!keyword ? <ProductCarousel /> : <Link to='/' className='btn btn-light mb-4'>Go Back</Link>}
       {isLoading ? (<Loader />) : isError ? (<Message variant='danger'>{isError?.data?.message || isError.error}</Message>) : (<><h1>Latest Products</h1>
      <Row>
         {data.products.map((product) => (
