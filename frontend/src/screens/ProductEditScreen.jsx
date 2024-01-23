@@ -79,7 +79,7 @@ const ProductEditScreen = () => {
     <FormContainer>
         <h1>Edit Product</h1>
         {loadingUpdate && <Loader />}
-        {isLoading ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : (
+        {isLoading ? <Loader /> : error ? <Message variant='danger'>{error?.data?.message || error.error}</Message> : (
             <Form onSubmit={submitHandler}>
                 <Form.Group controlId='name'>
                     <Form.Label>Name</Form.Label>
@@ -104,6 +104,9 @@ const ProductEditScreen = () => {
                         <Form.Control type='file' label='Choose file' onChange={uploadFileHandler}></Form.Control>
                     </Form.Group>
                 </Form.Group>
+
+                {loadingUpload && <Loader />}
+
                 <Form.Group controlId='brand' className='my-2'>
                     <Form.Label>Brand</Form.Label>
                     <Form.Control
